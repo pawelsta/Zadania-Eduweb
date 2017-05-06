@@ -1,0 +1,106 @@
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<style>
+#FileInput {border: 2px solid; background-color: #ccff66; width: 550px; height: 150px; text-align: center;}
+#preview {border: 2px solid; background-color: #ccff66; width: 550px; height: float; text-align: center;}
+#copy {border: solid; background-color: #ccff66; width: 550px; height: float; text-align: center;}
+</style>
+</head>
+<title>konwerter_markdown_t3z5</title>
+<h1>Konwerter Markdown</h1>
+<body>
+<!-- Korzystając z File API stwórz konwerter formatu Markdown do formatu HTML. Twoim
+zadaniem jest stworzenie pola <input> o typie file, dzięki któremu użytkownik będzie mógł
+wybrać plik z formatem Markdown (zapisz treść dostępną tutaj do pliku lub stwórz własną),
+który automatycznie zostanie skonwertowany do kodu HTML (wykorzystaj do tego celu
+Showdown.js). Kod HTML, który otrzymasz po użyciu odpowiedniej metody z Showdown.js,
+wstaw w pole podglądu, które utworzysz. Możesz również dodać możliwość skopiowania
+wygenerowanego kodu HTML. Najłatwiej zrobić to wyświetlając pole <textarea>, do
+którego wstawisz owy kod, a następnie wywołasz na nim metodę .select()-->
+<div id="FileInput">
+<p>Wstaw plik<p>
+<input type="file" id="file">
+</div>
+<div id="preview">
+<p>Podgląd</p>
+</div>
+<div id="copy">
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.js"></script>
+<script>
+	(function() {
+	var $ = function(selector) {
+		return document.querySelector(selector);
+	};
+	
+	var fileArea = $("#FileInput");
+	var fileInput = $("#file");
+	var preview = $("#preview");
+	var copy = $("#copy");
+	
+	function renderHTML(markdown) {
+	
+	var converter = new showdown.Converter({
+		noHeaderId: true
+	});
+	
+	return converter.makeHtml(markdown);
+	
+	};	
+	
+	function appendCopyButton() {
+	
+	var button = document.createElement("button");
+	
+	button.className = "button";
+	button.textContent = "Kopiowanie kodu html";
+	button.onclick = showHTMLPreview;
+	
+	preview.parentNode.appendChild(button);
+	
+	}
+	
+	function showHTMLPreview() {
+		var textarea = document.createElement("textarea");
+		
+		textarea.className = "textarea";
+		textarea.innerHTML = preview.innerHTML;
+		
+		copy.appendChild(textarea);
+		copy.style.display = "block";
+		textarea.select();
+		
+		window.location.hash = copy.getAttribute("id");
+		
+		this.style.display = "none";
+	
+	}
+	
+	function generatePreview(markdown) {
+		var html = renderHTML(markdown);
+		
+		preview.innerHTML = html;
+		
+		fileArea.style.display = "none";
+		
+		appendCopyButton();
+	};
+	
+	fileInput.addEventListener("change", function(e) {
+	
+	
+		var file = e.target.files[0];
+		var reader = new FileReader();
+		
+		reader.onload = function() {
+			generatePreview(this.result);
+		}
+		
+		reader.readAsText(file);
+	}, false);
+	
+	})();
+</script>
+</body>
+</html>

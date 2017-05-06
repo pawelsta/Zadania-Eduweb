@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<style type="text/css">
+div#odtwarzacz{ width: 550px; background:#000;}
+div#my_controls_bar{background: #333; padding: 10px}
+</style>
+</head>
+<title>odtwarzacz_filmów_t3z4</title>
+<h1>Odtwarzacz_Filmów</h1>
+<body>
+<!-- Stwórz odtwarzacz filmów, który udostępni podstawowe funkcjonalności. Będą to
+możliwość odtwarzania, pauzowania, wyświetlania paska postępu (który umożliwi również
+przewijanie). Wyświetl również czas trwania całego filmu, a także aktualny czas postępu.
+Porada: aby ułatwić sobie życie, jako pasek postępu wykorzystać możesz element <input>
+o type range: bit.ly/input-range-->
+<script>
+var vid;
+var playbtn;
+var przewijanie;
+var aktualny_czas_filmu;
+var ogolny_czas_filmu;
+
+function initializePlayer() {
+	vid = document.getElementById("my_controls");
+	playbtn = document.getElementById("pausebtn");
+	przewijanie = document.getElementById("przewijanie");
+	aktualny_czas_filmu = document.getElementById("aktualny_czas_filmu");
+	ogolny_czas_filmu = document.getElementById("ogolny_czas_filmu");
+	playbtn.addEventListener("click",playPause,false);
+	przewijanie.addEventListener("change",vidprzew,false);
+	vid.addEventListener("timeupdate",przewczas,false);
+}
+window.onload = initializePlayer;
+
+function playPause() {
+		if(vid.paused) {
+			vid.play();
+			playbtn.innerHTML = "Pauza";
+		} else {
+			vid.pause();
+			playbtn.innerHTML = "Graj";
+		}
+}
+function vidprzew(){
+	var przew = vid.duration * (przewijanie.value / 100);
+	vid.currentTime = przew;
+	
+}
+function przewczas(){
+	var czas = vid.currentTime * (100 / vid.duration);
+	przewijanie.value = czas;
+	var aktmin = Math.floor(vid.currentTime / 60);
+	var aktsek = Math.floor(vid.currentTime - aktmin * 60);
+	var ogmin = Math.floor(vid.duration / 60);
+	var ogsek = Math.round(vid.duration - ogmin * 60);
+	if(aktsek <10) {
+		aktsek = "0" + aktsek;
+	}
+	if(ogsek <10) {
+		ogsek = "0" + ogsek;
+	}
+	if(aktmin <10) {
+		aktmin = "0" + aktmin;
+	}
+	if(ogmin <10) {
+		ogmin = "0" + ogmin;
+	}
+	aktualny_czas_filmu.innerHTML = aktmin + ":" + aktsek
+	ogolny_czas_filmu.innerHTML = ogmin + ":" + ogsek
+}
+</script>
+<div id="odtwarzacz">
+	<video id="my_controls" controls="controls" width="550" height="320">
+		<source src="C:\Users\Właścicel\Desktop\racoon2.ogg">
+	</video>
+	<div id="my_controls_bar">
+		<button id="pausebtn">Pauza</button>
+		<input id="przewijanie" type="range" min="0" max="100" value="0" step="1">
+		<span id="aktualny_czas_filmu"></span> / <span id="ogolny_czas_filmu"></span>
+	</div>
+</div>
+</body>
+</html>

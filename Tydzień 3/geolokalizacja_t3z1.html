@@ -1,0 +1,49 @@
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+</head>
+<title>geolokalizacja_t3z1</title>
+<h1>Link do mapy z położeniem użytkownika</h1>
+<body>
+<!-- Wykorzystaj API Geolokalizacji, by stworzyć odnośnik do map Bing, który otworzy mapę z
+aktualnym położeniem użytkownika. Stwórz na stronie internetowej przycisk, po kliknięciu
+którego pobrane zostanie położenie odwiedzającego. Z uzyskanych danych wyłuskaj
+latitude i longitude, a następnie wstaw je odpowiednio w następujący URL:
+http://bing.com/maps/default.aspx?cp=LAT~LON uzyskując w ten sposób np.
+http://bing.com/maps/default.aspx?cp=52.162050~21.071350 
+Na koniec, wyświetl użytkownikowi link, po kliknięciu którego zostanie przeniesiony pod
+wcześniej skonstruowany adres.-->
+<button id="pokazlokalizacje">Podaj Lokalizacje</button>
+<script>
+(function() {
+var button = document.querySelector("#pokazlokalizacje");
+
+button.addEventListener("click", function(e) {
+
+	if(!window.navigator.geolocation) {
+	return;
+	}
+
+	button.textContent - "Oczekiwanie";
+	button.setAttribute("disabled", true)
+
+	navigator.geolocation.getCurrentPosition(function(position) {
+	
+		var coords = position.coords,
+			mapLink = document.createElement("a");
+			
+		mapLink.classList.add("button");
+		mapLink.setAttribute("href", "http://bing.com/maps/default.aspx?cp=" + coords.latitude + "-" + coords.longitude);
+		mapLink.textContent = "Show on map my location";
+		
+		button.parentNode.appendChild(mapLink);
+		button.parentNode.removeChild(button);
+	
+	});
+	
+}, false);
+
+})();
+</script>
+</body>
+</html>

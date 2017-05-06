@@ -1,0 +1,89 @@
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<style>
+	#chat {
+		height:500px;
+	}
+	#kontekst {
+		display: none;
+	}
+	#chat_kontekst {
+		float:left;
+		border: 1px #000 solid;
+	}
+</style>
+</head>
+<title>websocket_chat_t3z3</title>
+<h1>Czat z użyciem Node.js i WebSockets</h1>
+<body>
+<!-- Stwórz czat, który wykorzystywał będzie serwer utworzony za pomocą platformy Node.js, a
+także protokół WebSockets, który umożliwi dwukierunkowe przesyłanie danych. Daj
+użytkownikom możliwość podania swojego pseudonimu. Zaimplementuj również
+wyświetlanie statusów, gdy ktoś dołączy do czata lub czat opuści. Wszystkie przesyłane
+wiadomości, a także statusy, powinny być widoczne dla wszystkich podłączonych klientów. -->
+<div id="username">
+	<p>Podaj swój nick</p>
+	<p id="nickError"></p>
+	<form id="nick">
+	<input size="40" id="nickname"></input>
+	<input type="submit"></input>
+	</form>
+</div>
+<div id="kontekst">
+	<div id="chat_kontekst">
+		<div id="chat"></div>
+		<form id="wyslij-wiadomosc">
+			<input size="40" id="wiadomosc"></input>
+			<input type="submit"></input>
+		</form>
+		</div>
+	<div id ="czatujacy"></div>
+	</div>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	jQuery(function($) {
+		var socket = io.connect();
+		var  $nickForm = $('#nick');
+		var  $nickError = $('#nickError');
+		var  $nickBox = $('#nickname');
+		var  $czatujacy = $('#czatujacy');
+		var  $messageForm = $('#wyslij-wiadomosc');
+		var  $messageBox = $('#wiadomosc');
+		var  $chat = $('#chat');
+		
+		$nickForm.submit(function(e){
+			e.preventDefault();
+			socket.emit('nowy uzytkownik', $nickBox.val(), function(data) {
+			if(data) {
+				$('#username').hide();
+				$('#kontekst').show();			
+				} else {
+				$nickError.html('Nick użytkownika jest już zajęty');
+				}
+			});
+			$nickBox.val('');
+		});
+		
+		socket.on('nazwy_uzytkowników', function(data) {
+			var html = '';
+			for (i=0; i<data.length; i++) {
+				html += '<br/>' + data[i] + '<br/>';
+			}
+			$czatujacy.html(html);
+		});
+		
+		$messageForm.submit(function(e) {
+			e.preventDefault();
+			socket.emit('wyslij wiadomosc', $messageBox.val());
+			$messageBox.val('');
+		});
+		
+		socket.on('nowa wiadomosc', function(data) {
+			$chat.append("<b>" + data.nick + ": </b>" + data.msg + "<br/>");
+		});
+	});
+</script>
+</body>
+</html>

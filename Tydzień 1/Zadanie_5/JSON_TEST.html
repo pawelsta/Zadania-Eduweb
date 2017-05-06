@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Request JSON Test</title>
+  </head>
+  <body>
+	<div>
+	<button id="button" type="submit">RELOAD</button>
+	</div>
+    <div id="show-data"></div>
+    <script src="jquery-3.1.1.js"></script>
+    <script>
+	$(document).ready(function () {
+    $("button").on("click", function() {
+	var showData = $('#show-data');
+
+    $.getJSON("https://jsonplaceholder.typicode.com/users", function (data) {
+      console.log(data);
+
+	  var items = [];
+	  
+	  $.each(data, function(key, val) {
+	  
+		items.push('<li id="' + key + '">' + 'Name: ' + val.name + '</br>' + 'Username: ' + val.username + '</br>' + 'E-mail: ' + val.email + '</br>' + 'Phone: ' + val.phone + '</li>');
+		
+		});
+		
+		$('<ul/>', {
+			'class': 'interest-list',
+			html: items.join('')
+		}).appendTo('body');
+		});
+		});
+		});
+	</script>
+  </body>
+</html>

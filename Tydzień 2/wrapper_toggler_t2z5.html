@@ -1,0 +1,76 @@
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<title>Wrapper_Toggler_t2z5</title>
+<h1>Wrapper Toggler dla elementów z drzewa DOM</h1>
+<body>
+<!--
+Do przygotowanego pod adresem http://pastebin.com/hUK5tnh3 kodu dodaj konstruktor
+(klasę) o nazwie Toggler. Przy tworzeniu nowych jej instancji z użyciem słowa kluczowego
+new (jak możesz zobaczyć w przygotowanym kodzie) przekazywać będziemy selektor. Za
+jego pomocą należy znaleźć na stronie odpowiedni element (skorzystaj z metody
+document.querySelector) i zapisać go w nowo stworzonym obiekcie. Następnie dodaj 3
+metody. Pierwsza z nich o nazwie getElem powinna po prostu zwrócić znaleziony
+wcześniej element. Metoda show i hide powinny kolejno pokazywać i ukrywać element.
+Jeśli wszystko wykonasz poprawnie, kod który został już napisany powinien działać bez
+żadnych modyfikacji. Zauważ, że do elementu o identyfikatorze button zostało przypisane
+zdarzenie kliknięcia. Taki element musisz wstawić na stronę, podobnie jak i element,
+którego selektor zostanie przekazany przy tworzeniu nowego obiektu klasy Toggler.
+-->
+<div id="section">
+	<p style="background-color: yellow">
+	[1] 1 Gallia est omnis divisa in partes tres, quarum unam incolunt Belgae, aliam Aquitani, tertiam qui ipsorum lingua Celtae, nostra Galli appellantur. 2 Hi omnes lingua, institutis, legibus inter se differunt. Gallos ab Aquitanis Garumna flumen, a Belgis Matrona et Sequana dividit. 3 Horum omnium fortissimi sunt Belgae, propterea quod a cultu atque humanitate provinciae longissime absunt, minimeque ad eos mercatores saepe commeant atque ea quae ad effeminandos animos pertinent important, 4 proximique sunt Germanis, qui trans Rhenum incolunt, quibuscum continenter bellum gerunt. Qua de causa Helvetii quoque reliquos Gallos virtute praecedunt, quod fere cotidianis proeliis cum Germanis contendunt, cum aut suis finibus eos prohibent aut ipsi in eorum finibus bellum gerunt. 5 Eorum una pars, quam Gallos obtinere dictum est, initium capit a flumine Rhodano, continetur Garumna flumine, Oceano, finibus Belgarum, attingit etiam ab Sequanis et Helvetiis flumen Rhenum, vergit ad septentriones. 6 Belgae ab extremis Galliae finibus oriuntur, pertinent ad inferiorem partem fluminis Rheni, spectant in septentrionem et orientem solem. 7 Aquitania a Garumna flumine ad Pyrenaeos montes et eam partem Oceani quae est ad Hispaniam pertinet; spectat inter occasum solis et septentriones. 
+	</p>
+</div>
+<button id="button" data-show="SHOW" data-hide="HIDE">SHOW</button>
+<script>
+(function() {
+
+function Toggler(selector) {
+
+			if( !(this instanceof Toggler) ) {
+				return new Toggler(selector);
+			}
+			
+			this.elem = document.querySelector(selector);
+			
+		}
+		
+		Toggler.prototype.getElem = function() {
+		
+			return this.elem;
+		
+		};
+		
+		Toggler.prototype.show = function() {
+		
+			this.elem.style.display = "";
+		
+		};
+		
+		Toggler.prototype.hide = function() {
+		
+			this.elem.style.display = "none";
+		
+		};
+		
+var elem = new Toggler("#section");
+var button = document.querySelector("#button");
+
+elem.hide();
+ 
+button.addEventListener("click", function() {
+ 
+    if(elem.getElem().style.display == "none") {
+        elem.show();
+		button.textContent = button.dataset.hide;
+    } else {
+        elem.hide();
+		button.textContent = button.dataset.show;
+    }
+ 
+}, false);
+})();
+</script>
+</body>
+</html>
